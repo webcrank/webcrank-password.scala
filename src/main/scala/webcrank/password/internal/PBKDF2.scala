@@ -26,7 +26,7 @@ case class PBKDF2(algorithm: String) {
     pbkdf2(password, gensalt(saltbytes), algorithm, rounds, size)
 
   def verify(password: String, crypted: String) = crypted match {
-    case MCF(alg, AsInt(rounds) :: AsInt(size) :: salt :: _ :: Nil) =>
+    case MCFString(alg, AsInt(rounds) :: AsInt(size) :: salt :: _ :: Nil) =>
       pbkdf2(password, Base64.decode(salt), alg, rounds, size) == crypted
     case _ => false
   }
