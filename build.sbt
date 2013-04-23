@@ -2,7 +2,7 @@ name := "webcrank-password"
 
 scalaVersion := "2.10.1"
 
-crossScalaVersions := Seq("2.10.1")
+crossScalaVersions := Seq("2.9.2", "2.9.3", "2.10.1")
 
 releaseSettings
 
