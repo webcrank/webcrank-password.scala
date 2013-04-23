@@ -18,6 +18,8 @@ import scala.util.control.Exception._
  *
  * This implementation requires that specified `algorithm` be
  * provided by a registered JCE provider.
+ *
+ * @algorithm Underlying PBKDF algorithm name.
  */
 case class PBKDF2(algorithm: String) {
   import PBKDF2._
