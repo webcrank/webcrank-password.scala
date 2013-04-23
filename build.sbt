@@ -8,6 +8,7 @@ libraryDependencies ++= Seq(
   "org.scalaz" %% "scalaz-core" % "7.0.0",
   "org.scalaz" %% "scalaz-effect" % "7.0.0",
   "org.mindrot" % "jbcrypt" % "0.3m",
+  "com.lambdaworks" % "scrypt" % "1.3.3",
   "com.owtelse.codec" % "base64" % "1.0.4",
   "org.scalaz" %% "scalaz-scalacheck-binding" % "7.0.0" % "test",
   "org.scalacheck" %% "scalacheck" % "1.10.0" % "test"

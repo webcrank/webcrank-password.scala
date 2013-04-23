@@ -2,6 +2,8 @@ package webcrank.password
 
 import scalaz.effect.IO
 
+// https://www.owasp.org/index.php/Password_Storage_Cheat_Sheet
+
 sealed trait PasswordAlgorithm {
   def gensalt: IO[String]
   def hash(password: String, salt: String): String
@@ -34,7 +36,7 @@ case class PBKDF2withHMACSHA256(rounds: Int = 65536, saltbytes: Int = 16, size: 
     PBKDF2.verify(password, hashed)
 }
 
-case class BCrypt(cost: Int = 12) extends PasswordAlgorithm {
+case class BCrypt(cost: Int = 14) extends PasswordAlgorithm {
   import org.mindrot.jbcrypt.{BCrypt => JBCrypt}
 
   def gensalt =
