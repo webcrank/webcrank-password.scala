@@ -8,18 +8,18 @@ import javax.crypto._, javax.crypto.spec._
 
 import scala.util.control.Exception._
 
-/**
+/*
  * Implement PBKDF2 in terms of JCE.
  *
  * This implementation generates and verifies an MCF string of
  * the form:
  *
- *     `$algorithm$rounds$keysize$salt$key`
+ *     {{{
+ *       $algorithm$rounds$keysize$salt$key
+ *     }}}
  *
  * This implementation requires that specified `algorithm` be
  * provided by a registered JCE provider.
- *
- * @param algorithm Underlying PBKDF algorithm name.
  */
 case class PBKDF2(algorithm: String) {
   import PBKDF2._
