@@ -27,13 +27,25 @@ resolvers ++= Seq(
   "oss releases" at "http://oss.sonatype.org/content/repositories/releases"
 )
 
-scalacOptions ++= Seq(
-  "-deprecation",
-  "-unchecked",
-  "-optimise",
-  "-Yinline-warnings",
-  "-feature",
-  "-language:implicitConversions",
-  "-language:higherKinds",
-  "-language:postfixOps"
-)
+scalacOptions <++= scalaVersion.map(ver => {
+  val scala_2_9 = Seq(
+    "-Ydependent-method-types"
+  )
+  val scala_2_10 = Seq(
+    "-Yinline-warnings",
+    "-Yno-adapted-args",
+    "-feature",
+    "-language:implicitConversions",
+    "-language:higherKinds",
+    "-language:postfixOps"
+  )
+  val all = Seq(
+    "-deprecation",
+    "-unchecked",
+    "-optimise",
+    "-Ywarn-value-discard",
+    "-Ywarn-all",
+    "-Xfatal-warnings"
+  )
+  all ++ (if (ver startsWith "2.9") scala_2_9 else scala_2_10)
+})

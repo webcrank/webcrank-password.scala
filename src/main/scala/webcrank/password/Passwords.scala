@@ -14,7 +14,7 @@ trait PasswordOps {
 
   // FIX implement
   def migrate(password: String, hashed: String, algorithm: PasswordAlgorithm) =
-    ???
+    sys.error("???")
 }
 
 object Passwords extends PasswordOps
