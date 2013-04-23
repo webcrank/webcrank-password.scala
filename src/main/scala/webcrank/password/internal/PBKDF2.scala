@@ -7,46 +7,55 @@ import java.security._
 import javax.crypto._, javax.crypto.spec._
 
 import scala.util.control.Exception._
-import scalaz.effect.IO
 
+/**
+ * Implement PBKDF2 in terms of JCE.
+ *
+ * This implementation generates and verifies an MCF string of
+ * the form:
+ *
+ *     `$algorithm$rounds$keysize$salt$key`
+ *
+ * This implementation requires that specified `algorithm` be
+ * provided by a registered JCE provider.
+ */
+case class PBKDF2(algorithm: String) {
+  import PBKDF2._
 
-private[webcrank] object PBKDF2 {
-  lazy val random = new SecureRandom
+  def crypt(password: String, rounds: Int, saltbytes: Int, size: Int) =
+    pbkdf2(password, gensalt(saltbytes), algorithm, rounds, size)
 
-  def gensalt(size: Int) = IO {
-    val salt = new Array[Byte](size)
-    random.nextBytes(salt)
-    Base64.encode(salt)
+  def verify(password: String, crypted: String) = crypted match {
+    case MCF(alg, AsInt(rounds) :: AsInt(size) :: salt :: _ :: Nil) =>
+      pbkdf2(password, Base64.decode(salt), alg, rounds, size) == crypted
+    case _ => false
   }
 
-  def hash(password: String, salt: String, algorithm: String, rounds: Int, size: Int) = {
-    val spec = new PBEKeySpec(password.toCharArray, salt.getBytes("UTF-8"), rounds, size)
+  def pbkdf2(password: String, salt: Array[Byte], algorithm: String, rounds: Int, size: Int) = {
+    val spec = new PBEKeySpec(password.toCharArray, salt, rounds, size)
     val keys = SecretKeyFactory.getInstance(algorithm)
     val key = keys.generateSecret(spec)
     val bytes = key.getEncoded
-    List(
+    "$" + List(
       algorithm,
       rounds.toString,
       size.toString,
-      salt,
+      Base64.encode(salt),
       Base64.encode(bytes)
     ).mkString("$")
   }
+}
 
-  def verify(password: String, hashed: String) = {
-    def toInt(s: String): Option[Int] =
+object PBKDF2 {
+  def gensalt(size: Int) = {
+    val random =  SecureRandom.getInstance("SHA1PRNG")
+    val salt = new Array[Byte](size)
+    random.nextBytes(salt)
+    salt
+  }
+
+  object AsInt {
+    def unapply(s: String): Option[Int] =
       catching(classOf[NumberFormatException]) opt s.toInt
-
-    def compute(salt: String, algorithm: String, rounds: String, size: String) =
-      for {
-        r <- toInt(rounds)
-        s <- toInt(size)
-      } yield hash(password, salt, algorithm, r, s)
-
-    hashed.split("[$]").toList match {
-      case alg :: rounds :: size :: salt :: _ :: Nil =>
-        compute(salt, alg, rounds, size) map (_ == hashed) getOrElse false
-      case _ => false
-    }
   }
 }
