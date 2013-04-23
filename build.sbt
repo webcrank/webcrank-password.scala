@@ -4,10 +4,6 @@ scalaVersion := "2.10.1"
 
 crossScalaVersions := Seq("2.9.2", "2.9.3", "2.10.1")
 
-releaseSettings
-
-useGpg := true
-
 libraryDependencies ++= Seq(
   "org.scalaz" %% "scalaz-core" % "7.0.0",
   "org.scalaz" %% "scalaz-effect" % "7.0.0",
@@ -22,30 +18,12 @@ libraryDependencies <+= scalaVersion.apply(ver => {
   "org.specs2" %% "specs2" % specs % "test"
 })
 
-resolvers ++= Seq(
-  "oss snapshots" at "http://oss.sonatype.org/content/repositories/snapshots",
-  "oss releases" at "http://oss.sonatype.org/content/repositories/releases"
+webcrank.standard(
+  "webcrank.password",
+  "http://webcrank.io",
+  "git://github.com/webcrank/webcrank-password.scala.git",
+  webcrank.licenses.BSD3,
+  Seq(
+    webcrank.developer("mth", "Mark Hibberd", Some("http://mth.io"))
+  )
 )
-
-scalacOptions <++= scalaVersion.map(ver => {
-  val scala_2_9 = Seq(
-    "-Ydependent-method-types"
-  )
-  val scala_2_10 = Seq(
-    "-Yinline-warnings",
-    "-Yno-adapted-args",
-    "-feature",
-    "-language:implicitConversions",
-    "-language:higherKinds",
-    "-language:postfixOps"
-  )
-  val all = Seq(
-    "-deprecation",
-    "-unchecked",
-    "-optimise",
-    "-Ywarn-value-discard",
-    "-Ywarn-all",
-    "-Xfatal-warnings"
-  )
-  all ++ (if (ver startsWith "2.9") scala_2_9 else scala_2_10)
-})

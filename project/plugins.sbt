@@ -1,3 +1,3 @@
-addSbtPlugin(("com.typesafe.sbt" % "sbt-pgp" % "0.7").cross(CrossVersion.full))
+resolvers += "oss releases" at "http://oss.sonatype.org/content/repositories/releases"
 
-addSbtPlugin("com.github.gseitz" % "sbt-release" % "0.7")
+addSbtPlugin("io.webcrank" % "webcrank-build" % "0.3")
