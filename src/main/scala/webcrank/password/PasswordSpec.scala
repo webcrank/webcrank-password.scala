@@ -1,4 +1,5 @@
 package webcrank.password
+
 /**
  * Define password algorithm and parameters.
  *
