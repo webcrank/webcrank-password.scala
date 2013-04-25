@@ -15,6 +15,8 @@ package webcrank.password
  *
  * For guidance consider using
  * [[https://www.owasp.org/index.php/Password_Storage_Cheat_Sheet OWASP password cheat sheet.]]
+ * See `Password#{algorithm}` methods for convenience
+ * and default parameters.
  */
 sealed trait PasswordSpec
 

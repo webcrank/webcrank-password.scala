@@ -44,9 +44,23 @@ case class Passwords(spec: PasswordSpec) {
  *
  * In terms of algorithms selection there are a few factors that should be
  * considered:
+ *  - availability of algorithm
  *  - trust of underlying implementation
  *  - work factors of algorithm
  *  - validation requirements
+ *
+ * '''Availability of algorithm'''
+ *
+ * Of the provided algorithms scrypt, bcrypt and PBKDF2 with HMAC-SHA1 are
+ * always available. PBKDF2 with HMAC-SHA256 or HMAC-SHA512 are only available
+ * on JDK8 or with a custom JCE provider such as IAIK or BSAFE.
+ *
+ * The fact that PBKDF2 is stuck with HMAC-SHA1 by default potentially makes
+ * it less desirable.
+ *
+ *
+ * '''Trust of underlying implementaion'''
+ *
  *
  * Trust of underlying implementations is difficult, but all implementations
  * are open source and can be audited:
@@ -54,19 +68,34 @@ case class Passwords(spec: PasswordSpec) {
  *  - [[https://github.com/wg/scrypt scrypt implementation]]
  *  - [[http://hg.openjdk.java.net/jdk8/jdk8/jdk/file/f4c62eecf7fa/src/share/classes/com/sun/crypto/provider/ openjdk pbkdf2 implementations]]
  *
+ * There is some ongoing effort to complete a review of the scrypt and bcrypt
+ * implementations.
+ *
+ * '''Work factors'''
+ *
  * Work factors of underlying algorithm is also difficult to classify because
- * of the number of variables invloved (CPU, Memory, etc...), but a generalized
- * assesment would be:
- *  1) scrypt
- *  2) bcrypt
- *  3) pbkdf2
+ * of the number of variables invloved (CPU, Memory, etc...).
+ *
+ * Reading is possibly the only solution, but it is worth noting that scrypt
+ * was specifically designed to be more difficult to run with modern computing
+ * constraints (or lack there of) on FGPAs and alike. Scrypt is build on top
+ * of PBKDF2 with HMAC-SHA256. The [scrypt paper](http://www.tarsnap.com/scrypt/scrypt.pdf)
+ * has some insight into this.
+ *
+ * In terms of choosing appropriate factors, measurement is often the best
+ * approach. As a general rule you would want to tune the algorithm so password generation takes ~100ms.
+ * There are some factors listed in the
+ * [[https://www.owasp.org/index.php/Password_Storage_Cheat_Sheet OWASP password cheatsheet]]
+ * which is a pretty good source of information
+ *
+ * '''Validation requirements'''
  *
  * Validation requirements are easier. You will know if you have them.
  * PBKDF2 is the only NIST approved algorithm.
  */
 object Passwords {
   /**
-   * Use SCrypt for derivation.
+   * Use [[http://www.tarsnap.com/scrypt/scrypt.pdf SCrypt]] for derivation.
    *
    * Default parameters: N = 16384 (2 ^ 14). r = 8, p = 1
    *
@@ -79,17 +108,17 @@ object Passwords {
     Passwords(SCrypt(n, r, p))
 
   /**
-   * Use BCrypt for derivation.
+   * Use [[http://static.usenix.org/events/usenix99/provos/provos_html/node1.html BCrypt]] for derivation.
    *
    * Default parameters: cost = 12.
    *
-   * Note that work factor increases at 2^{cost}.
+   * Note that work factor for bcrypt increases at 2^{cost}.
    */
   def bcrypt(cost: Int = 12) =
     Passwords(BCrypt(cost))
 
   /**
-   * Use PBKDF2 for derivation.
+   * Use [[http://www.ietf.org/rfc/rfc2898.txt PBKDF2]] for derivation.
    *
    * Default parameters: rounds = 65536 (2 ^ 16), salt length: 16 bytes, key size: 256 bits, digest = SHA1.
    *

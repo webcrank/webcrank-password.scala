@@ -15,8 +15,8 @@ This library has the following goals:
 Supported algorithms                          | Default parameters
 --------------------------------------------- | --------------------------------------------------------------------
 [scrypt](http://www.tarsnap.com/scrypt.html)  | N = 16384 (2 ^ 14). r = 8, p = 1
-[bcrypt](http://en.wikipedia.org/wiki/Bcrypt) | cost = 12
-[pbkdf2](http://tools.ietf.org/html/rfc2898)  | 65536 (2 ^ 16), salt length: 16 bytes, key size: 256 bits, digest: sha1
+[bcrypt](http://static.usenix.org/events/usenix99/provos/provos_html/node1.html) | cost = 12
+[PBKDF2](http://tools.ietf.org/html/rfc2898)  | 65536 (2 ^ 16), salt length: 16 bytes, key size: 256 bits, digest: sha1
 
 Note that this library has _no_ dependencies on the rest of webcrank and can be used independently.
 
