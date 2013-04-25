@@ -6,7 +6,7 @@ import javax.crypto.SecretKeyFactory
 import scala.util.control.Exception._
 
 object PasswordsSpec extends test.Spec {
-  // WARNING: This parameters are chosen for test performance not security.
+  // WARNING: These parameters are chosen for test performance not security.
   //                    -- DO NOT COPY --
   def scrypt = Passwords.scrypt(1024)
   def bcrypt = Passwords.bcrypt(8)
@@ -14,26 +14,43 @@ object PasswordsSpec extends test.Spec {
   def pbkdf2sha256 = Passwords.pbkdf2(rounds = 1024, digest = SHA256)
   def pbkdf2sha512 = Passwords.pbkdf2(rounds = 1024, digest = SHA512)
 
-  def symmetric(passwords: Passwords, s: String) =
-    !s.isEmpty ==> passwords.verify(s, passwords.crypt(s))
+  "bcrypt" should satisfy(bcrypt, "2a")
+
+  "acrypt" should satisfy(scrypt, "s0")
+
+  "pbkdf2-hmac-sha1" should satisfy(pbkdf2sha1, "PBKDF2WithHMACSHA1")
+
+  if (supported("PBKDF2WithHMACSHA256"))
+    "pbkdf2-hmac-sha256" should satisfy(pbkdf2sha256, "PBKDF2WithHMACSHA256")
+
+  if (supported("PBKDF2WithHMACSHA612"))
+    "pbkdf2-hmac-sha512" should satisfy(pbkdf2sha512, "PBKDF2WithHMACSHA512")
+
+  def satisfy(passwords: Passwords, identifier: String) = {
+    "be symmetric" ! prop((s: String) =>
+      !s.isEmpty ==> passwords.verify(s, passwords.crypt(s)))
+
+    "be identified in mcf" ! prop((s: String) =>
+      !s.isEmpty ==> passwords.crypt(s).startsWith("$" + identifier + "$"))
+
+    "verify scrypt" ! prop((s: String) =>
+       passwords.verify(s, scrypt.crypt(s)))
+
+    "verify bcrypt" ! prop((s: String) =>
+       passwords.verify(s, bcrypt.crypt(s)))
+
+    "verify pbkdf2-hmac-sha1" ! prop((s: String) =>
+       passwords.verify(s, pbkdf2sha1.crypt(s)))
+
+    "verify pbkdf2-hmac-sha256" ! prop((s: String) =>
+       passwords.verify(s, pbkdf2sha256.crypt(s)))
+
+    "verify pbkdf2-hmac-sha512" ! prop((s: String) =>
+       passwords.verify(s, pbkdf2sha512.crypt(s)))
+  }
 
   def supported(alg: String) =
     (catching(classOf[NoSuchAlgorithmException]) opt {
       SecretKeyFactory.getInstance(alg)
     }).isDefined
-
-
-  "password" should {
-    if (supported("PBKDF2WithHMACSHA256"))
-      "symmetric pbkdf2 with hmac sha256" ! prop((s: String) => symmetric(pbkdf2sha256, s))
-
-    if (supported("PBKDF2WithHMACSHA512"))
-      "symmetric pbkdf2 with hmac sha512" ! prop((s: String) => symmetric(pbkdf2sha512, s))
-
-    "symmetric pbkdf2 with hmac sha1" ! prop((s: String) => symmetric(pbkdf2sha1, s))
-
-    "symmetric bcrypt" ! prop((s: String) => symmetric(bcrypt, s))
-
-    "symmetric scrypt" ! prop((s: String) => symmetric(scrypt, s))
-  }
 }
