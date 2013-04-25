@@ -193,7 +193,7 @@ understand the following format:
 
     $algorithm$rounds$keysize$base64(salt)$base64(key)
 
-Where algorithms is one of: PBKDF2WithHMACSHA1, PBKDF2WithHMACSHA256 and PBKDF2WithHMACSHA512.
+Where `algorithm` is one of: PBKDF2WithHMACSHA1, PBKDF2WithHMACSHA256 and PBKDF2WithHMACSHA512.
 
 Any interop failure would be considered a _serious_ bug, please report.
 
@@ -267,7 +267,7 @@ of PBKDF2 with HMAC-SHA256. The [scrypt paper](http://www.tarsnap.com/scrypt/scr
 has some insight into this.
 
 In terms of choosing appropriate factors, measurement is often the best
-approach. As a general rule you would want to tune the algorithm so password generation takes ~100ms.
+approach. As a general rule, for interactive password storage (such as for a web app), you would want to tune the algorithm so password generation takes ~100ms.
 There are some factors listed in the
 [OWASP password cheatsheet](https://www.owasp.org/index.php/Password_Storage_Cheat_Sheet)
 which is a pretty good source of information.
