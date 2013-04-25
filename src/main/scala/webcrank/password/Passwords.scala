@@ -97,14 +97,10 @@ object Passwords {
   /**
    * Use [[http://www.tarsnap.com/scrypt/scrypt.pdf SCrypt]] for derivation.
    *
-   * Default parameters: N = 16384 (2 ^ 14). r = 8, p = 1
+   * Default parameters: N = 65536 (2 ^ 16). r = 8, p = 1
    *
-   * Default parameters taken from Colin Pervival's original
-   * recommendations for interactive password storage. Even
-   * though this recommendation is old (2009), these defaults
-   * are reasonable on modern hardware.
    */
-  def scrypt(n: Int = 16384, r: Int = 8, p: Int = 1) =
+  def scrypt(n: Int = 65536, r: Int = 8, p: Int = 1) =
     Passwords(SCrypt(n, r, p))
 
   /**
