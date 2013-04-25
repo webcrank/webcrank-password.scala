@@ -81,43 +81,22 @@ object Passwords {
   /**
    * Use BCrypt for derivation.
    *
-   * Default parameters: cost = 14.
+   * Default parameters: cost = 12.
    *
-   * Note that work factor increases at 2^cost.
+   * Note that work factor increases at 2^{cost}.
    */
-  def bcrypt(cost: Int = 14) =
+  def bcrypt(cost: Int = 12) =
     Passwords(BCrypt(cost))
 
   /**
-   * Use PBKDF2 with HMAC-SHA1 for derivation.
+   * Use PBKDF2 for derivation.
    *
-   * Default parameters: rounds = 65536 (2 ^ 16), salt length: 16 bytes, key size: 256 bits.
+   * Default parameters: rounds = 65536 (2 ^ 16), salt length: 16 bytes, key size: 256 bits, digest = SHA1.
    *
-   * Note: SHA2 based implementations would normally be preferred, but they
-   * were not included in the standard library before JDK8.
+   * Note: That SHA256 and SHA512 can only be used with JDK8+ or with a custom JCE
+   * provider that supports this algorithm such as BSAFE or IAIK. Excepting this
+   * limitations SHA2 algorithms would normally be preferred.
    */
-  def pbkdf2sha1(rounds: Int = 65536, saltbytes: Int = 16, size: Int = 256) =
-    Passwords(PBKDF2withHMACSHA1(rounds, saltbytes, size))
-
-  /**
-   * Use PBKDF2 with HMAC-SHA256 for derivation.
-   *
-   * Default parameters: rounds = 65536 (2 ^ 16), salt length: 16 bytes, key size: 256 bits.
-   *
-   * Note: This can only be used with JDK8+ or with another JCE provider that
-   * supports this algorithm such as BSAFE or IAIK.
-   */
-  def pbkdf2sha256(rounds: Int = 65536, saltbytes: Int = 16, size: Int = 256) =
-    Passwords(PBKDF2withHMACSHA256(rounds, saltbytes, size))
-
-  /**
-   * Use PBKDF2 with HMAC-SHA512 for derivation.
-   *
-   * Default parameters: rounds = 65536 (2 ^ 16), salt length: 16 bytes, key size: 512 bits.
-   *
-   * Note: This can only be used with JDK8+ or with another JCE provider that
-   * supports this algorithm such as BSAFE or IAIK.
-   */
-  def pbkdf2sha512(rounds: Int = 65536, saltbytes: Int = 16, size: Int = 512) =
-    Passwords(PBKDF2withHMACSHA512(rounds, saltbytes, size))
+  def pbkdf2(rounds: Int = 65536, saltbytes: Int = 16, size: Int = 256, digest: Digest = SHA1) =
+    Passwords(PBKDF2(rounds, saltbytes, size, digest))
 }

@@ -11,11 +11,7 @@ object Crypt {
       Crypt(scrypt.crypt(_, p))
     case p @ BCrypt(_) =>
       Crypt(bcrypt.crypt(_, p))
-    case p @ PBKDF2withHMACSHA1(_, _, _) =>
-      Crypt(pbkdf2sha1.crypt(_, p))
-    case p @ PBKDF2withHMACSHA256(_, _, _) =>
-      Crypt(pbkdf2sha256.crypt(_, p))
-    case p @ PBKDF2withHMACSHA512(_, _, _) =>
-      Crypt(pbkdf2sha512.crypt(_, p))
+    case p @ PBKDF2(_, _, _, _) =>
+      Crypt(pbkdf2.crypt(_, p))
   }
 }

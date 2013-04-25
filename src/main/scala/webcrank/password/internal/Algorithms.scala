@@ -22,34 +22,37 @@ object Algorithms {
       S.check(password, hashed)
   }
 
-  object pbkdf2sha1 {
-    val pbkdf = PBKDF2("PBKDF2WithHMACSHA1")
+  /*
+   * Generates a webcrank-password specific MCF string that is:
+   *
+   *   $algorithm$rounds$keysize$base64(salt)$base64(key)
+   */
+  object pbkdf2 {
+    import com.owtelse.codec.Base64
+    import MCFString._
+    import JCE._
 
-    def crypt(password: String, spec: PBKDF2withHMACSHA1) =
-      pbkdf.crypt(password, spec.rounds, spec.saltbytes, spec.size)
+    def crypt(password: String, spec: PBKDF2) =
+      pbkdf2(password, gensalt(spec.saltbytes), algorithm(spec.digest), spec.rounds, spec.size)
 
-    def verify(password: String, hashed: String) =
-      pbkdf.verify(password, hashed)
-  }
+    def verify(password: String, crypted: String) = crypted match {
+      case MCFString(alg, AsInt(rounds) :: AsInt(size) :: salt :: _ :: Nil) =>
+        pbkdf2(password, Base64.decode(salt), alg, rounds, size) == crypted
+      case _ => false
+    }
 
-  object pbkdf2sha256 {
-    val pbkdf = PBKDF2("PBKDF2WithHMACSHA256")
+    def pbkdf2(password: String, salt: Array[Byte], alg: String, rounds: Int, size: Int) =
+      MCF(alg, List(
+        rounds.toString,
+        size.toString,
+        Base64.encode(salt),
+        Base64.encode(genkey(password, salt, rounds, size, alg))
+      )).mkString
 
-    def crypt(password: String, spec: PBKDF2withHMACSHA256) =
-      pbkdf.crypt(password, spec.rounds, spec.saltbytes, spec.size)
-
-    def verify(password: String, hashed: String) =
-      pbkdf.verify(password, hashed)
-  }
-
-
-  object pbkdf2sha512 {
-    val pbkdf = PBKDF2("PBKDF2WithHMACSHA512")
-
-    def crypt(password: String, spec: PBKDF2withHMACSHA512) =
-      pbkdf.crypt(password, spec.rounds, spec.saltbytes, spec.size)
-
-    def verify(password: String, hashed: String) =
-      pbkdf.verify(password, hashed)
+    def algorithm(digest: Digest) = digest match {
+      case SHA1 => "PBKDF2WithHMACSHA1"
+      case SHA256 => "PBKDF2WithHMACSHA256"
+      case SHA512 => "PBKDF2WithHMACSHA512"
+    }
   }
 }

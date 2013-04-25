@@ -22,39 +22,22 @@ sealed trait PasswordSpec
  * BCrypt key derivation algorithm defined by
  * [[http://static.usenix.org/events/usenix99/provos/provos_html/node1.html Provos and Mazieres].
  */
-case class BCrypt(cost: Int = 14)
+case class BCrypt(cost: Int)
   extends PasswordSpec
 
 /**
  * SCrypt key derivation algorithm defined by Percival in
  * [[http://tools.ietf.org/html/draft-josefsson-scrypt-kdf-01 draft-josefsson-scrypt-kdf-01]].
  */
-case class SCrypt(n: Int = 32768, r: Int = 8, p: Int = 1)
+case class SCrypt(n: Int, r: Int, p: Int)
   extends PasswordSpec
 
 /**
  * PBKDF #2 algorithm defined in [[http://www.ietf.org/rfc/rfc2898.txt rfc2892]]
  * utilizing an HMAC SHA1 as the underlying auth.
- */
-case class PBKDF2withHMACSHA1(rounds: Int, saltbytes: Int, size: Int)
-  extends PasswordSpec
-
-/**
- * PBKDF #2 algorithm defined in [[http://www.ietf.org/rfc/rfc2898.txt rfc2892]]
- * utilizing an HMAC SHA256 as the underlying auth.
  *
- * Note: This can only be used with JDK8+ or with another JCE provider that
- * supports this algorithm such as BSAFE or IAIK.
+ * Note: That SHA256 and SHA512 can only be used with JDK8+ or with a custom JCE
+ * provider that supports this algorithm such as BSAFE or IAIK.
  */
-case class PBKDF2withHMACSHA256(rounds: Int, saltbytes: Int, size: Int)
-  extends PasswordSpec
-
-/**
- * PBKDF #2 algorithm defined in [[http://www.ietf.org/rfc/rfc2898.txt rfc2892]]
- * utilizing an HMAC SHA256 as the underlying auth.
- *
- * Note: This can only be used with JDK8+ or with another JCE provider that
- * supports this algorithm such as BSAFE or IAIK.
- */
-case class PBKDF2withHMACSHA512(rounds: Int, saltbytes: Int, size: Int)
+case class PBKDF2(rounds: Int, saltbytes: Int, size: Int, digest: Digest)
   extends PasswordSpec

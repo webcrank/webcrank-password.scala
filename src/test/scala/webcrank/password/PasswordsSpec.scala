@@ -10,9 +10,9 @@ object PasswordsSpec extends test.Spec {
   //                    -- DO NOT COPY --
   def scrypt = Passwords.scrypt(1024)
   def bcrypt = Passwords.bcrypt(8)
-  def pbkdf2sha1 = Passwords.pbkdf2sha1(1024)
-  def pbkdf2sha256 = Passwords.pbkdf2sha256(1024)
-  def pbkdf2sha512 = Passwords.pbkdf2sha512(1024)
+  def pbkdf2sha1 = Passwords.pbkdf2(rounds = 1024, digest = SHA1)
+  def pbkdf2sha256 = Passwords.pbkdf2(rounds = 1024, digest = SHA256)
+  def pbkdf2sha512 = Passwords.pbkdf2(rounds = 1024, digest = SHA512)
 
   def symmetric(passwords: Passwords, s: String) =
     !s.isEmpty ==> passwords.verify(s, passwords.crypt(s))
