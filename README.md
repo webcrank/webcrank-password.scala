@@ -1,5 +1,5 @@
-webcrank-password.scala
-=======================
+webcrank-password
+-----------------
 
 [![Build Status](https://travis-ci.org/webcrank/webcrank-password.scala.png)](https://travis-ci.org/webcrank/webcrank-password.scala)
 
