@@ -47,6 +47,9 @@ object PasswordsSpec extends test.Spec {
 
     "verify pbkdf2-hmac-sha512" ! prop((s: String) =>
       !s.isEmpty ==> passwords.verify(s, pbkdf2sha512.crypt(s)))
+
+    "unique" ! prop((s: String) =>
+      !s.isEmpty ==> (passwords.crypt(s) != passwords.crypt(s)))
   }
 
   def supported(alg: String) =
