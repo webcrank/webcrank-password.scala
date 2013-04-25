@@ -114,8 +114,8 @@ the cost parameters over time.
 
 So the first thing to note is that the algorithm choice, and
 cost parameters _only_ affect the behaviour of `crypt`. The
-parameters are then embeded in a Modular Crypt Format (MCF)
-style string that encodes the algorithm any parameters, the
+parameters are then embedded in a Modular Crypt Format (MCF)
+style string that encodes the algorithm, any parameters, the
 salt and the derived key. This encoded information is used
 for password verification.
 
