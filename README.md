@@ -217,6 +217,7 @@ to what is considered an acceptible level of security over
 time. However, this should not affect your usage of the
 libary.
 
+Any compatability failure would be considered a _serious_ bug, please report.
 
 Security considerations
 -----------------------
