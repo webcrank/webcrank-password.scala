@@ -121,17 +121,3 @@ object Passwords {
   def pbkdf2sha512(rounds: Int = 65536, saltbytes: Int = 16, size: Int = 512) =
     Passwords(PBKDF2withHMACSHA512(rounds, saltbytes, size))
 }
-
-/**
- * A set of defaults password managers that blindly accept the defaults.
- *
- * Consider these safer then stupid, but not as safe as understanding
- * your actual security requirements.
- */
-object PasswordsCruiseControl {
-  def scrypt = Passwords.scrypt()
-  def bcrypt = Passwords.bcrypt()
-  def pbkdf2sha1 = Passwords.pbkdf2sha1()
-  def pbkdf2sha256 = Passwords.pbkdf2sha256()
-  def pbkdf2sha512 = Passwords.pbkdf2sha512()
-}
