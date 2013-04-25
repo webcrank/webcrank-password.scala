@@ -34,19 +34,19 @@ object PasswordsSpec extends test.Spec {
       !s.isEmpty ==> passwords.crypt(s).startsWith("$" + identifier + "$"))
 
     "verify scrypt" ! prop((s: String) =>
-       passwords.verify(s, scrypt.crypt(s)))
+      !s.isEmpty ==> passwords.verify(s, scrypt.crypt(s)))
 
     "verify bcrypt" ! prop((s: String) =>
-       passwords.verify(s, bcrypt.crypt(s)))
+      !s.isEmpty ==> passwords.verify(s, bcrypt.crypt(s)))
 
     "verify pbkdf2-hmac-sha1" ! prop((s: String) =>
-       passwords.verify(s, pbkdf2sha1.crypt(s)))
+      !s.isEmpty ==> passwords.verify(s, pbkdf2sha1.crypt(s)))
 
     "verify pbkdf2-hmac-sha256" ! prop((s: String) =>
-       passwords.verify(s, pbkdf2sha256.crypt(s)))
+      !s.isEmpty ==> passwords.verify(s, pbkdf2sha256.crypt(s)))
 
     "verify pbkdf2-hmac-sha512" ! prop((s: String) =>
-       passwords.verify(s, pbkdf2sha512.crypt(s)))
+      !s.isEmpty ==> passwords.verify(s, pbkdf2sha512.crypt(s)))
   }
 
   def supported(alg: String) =

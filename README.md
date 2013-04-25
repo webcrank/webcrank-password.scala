@@ -211,7 +211,11 @@ All algorithms currently supported, will be supported for
 crypt, unless a serious issue occurs where something is
 no longer deemed safe for password storage.
 
-
+If you choose to take the defaults, there is _no_ guarantee
+that they will not change. These defaults will be upgraded
+to what is considered an acceptible level of security over
+time. However, this should not affect your usage of the
+libary.
 
 
 Security considerations
