@@ -42,11 +42,13 @@ object PasswordsSpec extends test.Spec {
     "verify pbkdf2-hmac-sha1" ! prop((s: String) =>
       !s.isEmpty ==> passwords.verify(s, pbkdf2sha1.crypt(s)))
 
-    "verify pbkdf2-hmac-sha256" ! prop((s: String) =>
-      !s.isEmpty ==> passwords.verify(s, pbkdf2sha256.crypt(s)))
+    if (supported("PBKDF2WithHMACSHA256"))
+      "verify pbkdf2-hmac-sha256" ! prop((s: String) =>
+        !s.isEmpty ==> passwords.verify(s, pbkdf2sha256.crypt(s)))
 
-    "verify pbkdf2-hmac-sha512" ! prop((s: String) =>
-      !s.isEmpty ==> passwords.verify(s, pbkdf2sha512.crypt(s)))
+    if (supported("PBKDF2WithHMACSHA512"))
+      "verify pbkdf2-hmac-sha512" ! prop((s: String) =>
+        !s.isEmpty ==> passwords.verify(s, pbkdf2sha512.crypt(s)))
 
     "unique" ! prop((s: String) =>
       !s.isEmpty ==> (passwords.crypt(s) != passwords.crypt(s)))
