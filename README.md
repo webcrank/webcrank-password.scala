@@ -26,6 +26,8 @@ Using webcrank-password
 Simply import, build an implementation with appropriate parameters, 
 and call crypt/verify as required.
 
+```scala
+
     import webcrank.password.Passwords
     
     val passwords = Passwords.scrypt()
@@ -39,10 +41,11 @@ and call crypt/verify as required.
     // return false in this case where the password does not match
     passwords.verify("fido", crypted)
 
+```
 
 Example configurations:
 
-
+```scala
     // scrypt with default cost parameters
     val passwords = Passwords.scrypt()
 
@@ -82,7 +85,7 @@ Example configurations:
     // on JDK8 or with a custom JCE provider such as
     // IAIK or BSAFE.
     val passwords = Passwords.pbkdf2(rounds = 16384, digest = SHA256)
-
+```
 
 Security considerations
 -----------------------
