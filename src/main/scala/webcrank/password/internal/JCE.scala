@@ -18,6 +18,4 @@ object JCE {
     val key = keys.generateSecret(spec)
     key.getEncoded
   }
-
-
 }

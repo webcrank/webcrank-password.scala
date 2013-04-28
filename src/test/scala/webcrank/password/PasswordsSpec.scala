@@ -23,35 +23,35 @@ object PasswordsSpec extends test.Spec {
   if (supported("PBKDF2WithHMACSHA256"))
     "pbkdf2-hmac-sha256" should satisfy(pbkdf2sha256, "PBKDF2WithHMACSHA256")
 
-  if (supported("PBKDF2WithHMACSHA612"))
+  if (supported("PBKDF2WithHMACSHA512"))
     "pbkdf2-hmac-sha512" should satisfy(pbkdf2sha512, "PBKDF2WithHMACSHA512")
 
   def satisfy(passwords: Passwords, identifier: String) = {
     "be symmetric" ! prop((s: String) =>
-      !s.isEmpty ==> passwords.verify(s, passwords.crypt(s)))
+      passwords.verify(s, passwords.crypt(s)))
 
     "be identified in mcf" ! prop((s: String) =>
-      !s.isEmpty ==> passwords.crypt(s).startsWith("$" + identifier + "$"))
+      passwords.crypt(s).startsWith("$" + identifier + "$"))
 
     "verify scrypt" ! prop((s: String) =>
-      !s.isEmpty ==> passwords.verify(s, scrypt.crypt(s)))
+      passwords.verify(s, scrypt.crypt(s)))
 
     "verify bcrypt" ! prop((s: String) =>
-      !s.isEmpty ==> passwords.verify(s, bcrypt.crypt(s)))
+      passwords.verify(s, bcrypt.crypt(s)))
 
     "verify pbkdf2-hmac-sha1" ! prop((s: String) =>
-      !s.isEmpty ==> passwords.verify(s, pbkdf2sha1.crypt(s)))
+      passwords.verify(s, pbkdf2sha1.crypt(s)))
 
     if (supported("PBKDF2WithHMACSHA256"))
       "verify pbkdf2-hmac-sha256" ! prop((s: String) =>
-        !s.isEmpty ==> passwords.verify(s, pbkdf2sha256.crypt(s)))
+        passwords.verify(s, pbkdf2sha256.crypt(s)))
 
     if (supported("PBKDF2WithHMACSHA512"))
       "verify pbkdf2-hmac-sha512" ! prop((s: String) =>
-        !s.isEmpty ==> passwords.verify(s, pbkdf2sha512.crypt(s)))
+        passwords.verify(s, pbkdf2sha512.crypt(s)))
 
     "unique" ! prop((s: String) =>
-      !s.isEmpty ==> (passwords.crypt(s) != passwords.crypt(s)))
+      (passwords.crypt(s) != passwords.crypt(s)))
   }
 
   def supported(alg: String) =

@@ -7,7 +7,7 @@ crossScalaVersions := Seq("2.9.2", "2.9.3", "2.10.1")
 libraryDependencies ++= Seq(
   "org.mindrot" % "jbcrypt" % "0.3m",
   "com.lambdaworks" % "scrypt" % "1.3.3",
-  "com.owtelse.codec" % "base64" % "1.0.4",
+  "com.owtelse.codec" % "base64" % "1.0.6",
   "org.scalaz" %% "scalaz-scalacheck-binding" % "7.0.0" % "test",
   "org.scalacheck" %% "scalacheck" % "1.10.0" % "test"
 )
