@@ -26,7 +26,7 @@ Getting webcrank-password
 
 If you're using SBT, add the following dependency to your build file:
 
-    "io.webcrank" %% "webcrank-password" % "0.2"
+    "io.webcrank" %% "webcrank-password" % "0.3"
 
 
 Using webcrank-password

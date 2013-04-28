@@ -1,0 +1,9 @@
+
+0.2, first public release:
+
+  * Support for scrypt, bcrypt and PBKDF2 (with HMAC-SHA1, HMAC-SHA256 or HMAC-SHA512).
+  * scrypt defaults: n = 2 ^ 14, r = 8, p = 1
+  * bcrypt defaults: cost = 12
+  * pbkdf2 defaults: rounds = 2 ^ 16, salt length: 16 bytes, key size 256 bits, digest: sha1
+  * algorithm support guarantee
+  * cross built against 2.9.2, 2.9.3 and 2.10.x.

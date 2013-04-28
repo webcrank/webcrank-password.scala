@@ -1,0 +1,5 @@
+
+0.3, tweaks to defaults and dependencies:
+
+  * scrypt defaults increased to: n = 2 ^ 16, r = 8, p = 1
+  * base64 dependency pumped to 1.0.6
