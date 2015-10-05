@@ -69,7 +69,7 @@ val passwords = Passwords.pbkdf2()
 val passwords = Passwords.scrypt(n = 65536)
 
 // bcrypt with specified cost parameters,
-// note: cost is caluclated as 2^{cost} in bcrypt
+// note: cost is calculated as 2^{cost} in bcrypt
 val passwords = Passwords.bcrypt(cost = 12)
 
 // PBKDF2 with specified rounds, 16384 (2 ^ 14)
